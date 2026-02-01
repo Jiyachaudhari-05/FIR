@@ -20,36 +20,69 @@ interface FIRFormProps {
   onSuccess: () => void
   onCancel: () => void
   editingFIR?: FIR | null
+  initialData?: Partial<FIRFormData> | null
 }
 
-export function FIRForm({ onSuccess, onCancel, editingFIR }: FIRFormProps) {
+
+export function FIRForm({
+  onSuccess,
+  onCancel,
+  editingFIR,
+  initialData,
+}: FIRFormProps) {
   const user = getCurrentUser()
+  
+  // const [formData, setFormData] = useState<FIRFormData>({
+  //   complainantName: "",
+  //   complainantPhone: "",
+  //   complainantAddress: "",
+  //   incidentType: "",
+  //   incidentLocation: "",
+  //   incidentDateTime: "",
+  //   description: "",
+  //   priority: "Medium",
+  //   fatherHusbandName: "",
+  //   dateOfBirth: "",
+  //   nationality: "Indian",
+  //   occupation: "",
+  //   policeStation: "",
+  //   district: "",
+  //   directionDistance: "",
+  //   beatNumber: "",
+  //   informationType: "Written",
+  //   reasonForDelay: "",
+  //   propertiesInvolved: "",
+  // })
+
   const [formData, setFormData] = useState<FIRFormData>({
-    complainantName: "",
-    complainantPhone: "",
-    complainantAddress: "",
-    incidentType: "",
-    incidentLocation: "",
-    incidentDateTime: "",
-    description: "",
-    priority: "Medium",
-    fatherHusbandName: "",
-    dateOfBirth: "",
-    nationality: "Indian",
-    occupation: "",
-    policeStation: "",
-    district: "",
-    directionDistance: "",
-    beatNumber: "",
-    informationType: "Written",
-    reasonForDelay: "",
-    propertiesInvolved: "",
+    complainantName: initialData?.complainantName || "",
+    complainantPhone: initialData?.complainantPhone || "",
+    complainantAddress: initialData?.complainantAddress || "",
+    incidentType: initialData?.incidentType || "",
+    incidentLocation: initialData?.incidentLocation || "",
+    incidentDateTime: initialData?.incidentDateTime || "",
+    description: initialData?.description || "",
+    priority: initialData?.priority || "Medium",
+    policeStation: initialData?.policeStation,
+    district: initialData?.district,
+    beatNumber: initialData?.beatNumber,
+    informationType: initialData?.informationType,
+    reasonForDelay: initialData?.reasonForDelay,
+    propertiesInvolved: initialData?.propertiesInvolved,
   })
+
+
   const [selectedBNSSections, setSelectedBNSSections] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [locating, setLocating] = useState(false)
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData((prev) => ({ ...prev, ...initialData }))
+    }
+  }, [initialData])
 
   useEffect(() => {
     if (editingFIR) {
